@@ -1,0 +1,11 @@
+/* src/index.css */
+
+/*
+ * This file is where you import Tailwind's "layers".
+ * Tailwind will scan your component files for class names and replace
+ * these directives with all the necessary CSS during the build process.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
