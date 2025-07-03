@@ -4,21 +4,21 @@ This is a full-stack web application designed to streamline the payroll process 
 
 ## ✨ Features
 
-* **Excel/CSV Upload:** Easily upload employee master data, incentives, and deductions using `.xlsx` or `.csv` files.
-* **Multi-File Upload:** Upload multiple incentive or deduction files at once.
-* **Automated Payroll Calculation:** Automatically calculates `Final Salary = Base Salary + Total Incentives - Total Deductions`.
-* **Admin Review Dashboard:** A central place to view all generated payroll results.
-* **Approve/Reject Workflow:** Admins can approve or reject each payroll entry. Rejected entries require a reason.
-* **Data Traceability:** Click on an incentive or deduction total to see a detailed breakdown in a pop-up, including the source file for each entry.
-* **File Viewer:** Click the source file link in the pop-up to open a copy of the original uploaded spreadsheet in a new tab.
-* **Clear Separation of Concerns:** A Django REST Framework backend handles all data logic, while a React frontend provides a responsive user interface.
+-   **Excel/CSV Upload:** Easily upload employee master data, incentives, and deductions using `.xlsx` or `.csv` files.
+-   **Multi-File Upload:** Upload multiple incentive or deduction files at once.
+-   **Automated Payroll Calculation:** Automatically calculates `Final Salary = Base Salary + Total Incentives - Total Deductions`.
+-   **Admin Review Dashboard:** A central place to view all generated payroll results.
+-   **Approve/Reject Workflow:** Admins can approve or reject each payroll entry. Rejected entries require a reason.
+-   **Data Traceability:** Click on an incentive or deduction total to see a detailed breakdown in a pop-up, including the source file for each entry.
+-   **File Viewer:** Click the source file link in the pop-up to open a copy of the original uploaded spreadsheet in a new tab.
+-   **Clear Separation of Concerns:** A Django REST Framework backend handles all data logic, while a React frontend provides a responsive user interface.
 
 ## 🛠️ Tech Stack
 
-* **Backend:** Python, Django, Django REST Framework
-* **Frontend:** React.js, Tailwind CSS
-* **Data Processing:** `pandas` library for handling spreadsheet data.
-* **API Client:** `axios`
+-   **Backend:** Python, Django, Django REST Framework
+-   **Frontend:** React.js, Tailwind CSS
+-   **Data Processing:** `pandas` library for handling spreadsheet data.
+-   **API Client:** `axios`
 
 ---
 
@@ -28,8 +28,8 @@ Follow these steps to get the project running on your local machine.
 
 ### Prerequisites
 
-* Python 3.8+ and `pip`
-* Node.js and `npm`
+-   Python 3.8+ and `pip`
+-   Node.js and `npm`
 
 ### 1. Clone the Repository
 
@@ -98,9 +98,9 @@ The React frontend will now be running at `http://localhost:3000` and will open 
 
 The backend provides the following RESTful API endpoints:
 
-* `POST /api/upload/employee/`: Upload the employee master sheet.
-* `POST /api/upload/component/`: Upload one or more incentive/deduction sheets.
-* `POST /api/payroll/generate/`: Trigger payroll calculation.
-* `GET /api/payroll/results/`: Retrieve all payroll records for display.
-* `POST /api/payroll/approve/<id>/`: Approve a specific payroll entry.
-* `POST /api/payroll/reject/<id>/`: Reject a specific payroll entry with a reason.
+-   `POST /api/upload/employee/`: Upload the employee master sheet.
+-   `POST /api/upload/component/`: Upload one or more incentive/deduction sheets.
+-   `POST /api/payroll/generate/`: Trigger payroll calculation.
+-   `GET /api/payroll/results/`: Retrieve all payroll records for display.
+-   `POST /api/payroll/approve/<id>/`: Approve a specific payroll entry.
+-   `POST /api/payroll/reject/<id>/`: Reject a specific payroll entry with a reason.
