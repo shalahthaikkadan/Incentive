@@ -1,31 +1,27 @@
 # payroll/urls.py
 from django.urls import path
 from .views import (
-    UploadEmployeeSheetView,
-    UploadComponentSheetView,
-    GeneratePayrollView,
-    PayrollResultListView,
-    ApprovePayrollView,
-    RejectPayrollView,
+    UploadEmployeeSheetView, UploadComponentSheetView, ManualComponentView,
+    EmployeeListView, GeneratePayrollView, PayrollResultListView,
+    ApprovePayrollView, RejectPayrollView, PayrollRunListView, 
+    ArchivedResultListView, ArchivePayrollView,
+    # NEW: Import the delete view
+    DeletePayrollRunView,
 )
 
-# Maps the views to specific API endpoints
 urlpatterns = [
-    # Endpoint for uploading the employee master sheet
-    path('upload/employee/', UploadEmployeeSheetView.as_view(), name='upload-employee'),
+    path('upload/employee/', UploadEmployeeSheetView.as_view()),
+    path('upload/component/', UploadComponentSheetView.as_view()),
+    path('components/manual-add/', ManualComponentView.as_view()),
+    path('employees/', EmployeeListView.as_view()),
+    path('payroll/generate/', GeneratePayrollView.as_view()),
+    path('payroll/results/', PayrollResultListView.as_view()),
+    path('payroll/approve/<int:id>/', ApprovePayrollView.as_view()),
+    path('payroll/reject/<int:id>/', RejectPayrollView.as_view()),
+    path('payroll/archive/', ArchivePayrollView.as_view()),
+    path('payroll/history/', PayrollRunListView.as_view()),
+    path('payroll/history/<int:run_id>/', ArchivedResultListView.as_view()),
     
-    # Endpoint for uploading incentive or deduction sheets
-    path('upload/component/', UploadComponentSheetView.as_view(), name='upload-component'),
-    
-    # Endpoint to trigger the payroll generation process
-    path('payroll/generate/', GeneratePayrollView.as_view(), name='generate-payroll'),
-    
-    # Endpoint to retrieve all payroll results for the admin dashboard
-    path('payroll/results/', PayrollResultListView.as_view(), name='list-payroll-results'),
-    
-    # Endpoint to approve a specific payroll result by its ID
-    path('payroll/approve/<int:id>/', ApprovePayrollView.as_view(), name='approve-payroll'),
-    
-    # Endpoint to reject a specific payroll result by its ID
-    path('payroll/reject/<int:id>/', RejectPayrollView.as_view(), name='reject-payroll'),
+    # NEW: URL pattern for deleting a historical payroll run
+    path('payroll/history/<int:pk>/delete/', DeletePayrollRunView.as_view(), name='delete-payroll-run'),
 ]

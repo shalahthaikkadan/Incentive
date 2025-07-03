@@ -1,42 +1,38 @@
 # payroll/serializers.py
 from rest_framework import serializers
-from .models import Employee, PayrollResult
+from .models import Employee, Component, PayrollResult, PayrollRun, ArchivedPayrollResult
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    """Serializer for the Employee model, used for nested API responses."""
     class Meta:
         model = Employee
         fields = ['employee_id', 'name', 'phone', 'age', 'base_salary']
 
 class PayrollResultSerializer(serializers.ModelSerializer):
-    """
-    Serializer for the PayrollResult model.
-    Includes nested employee data and the component snapshot for rich API responses.
-    """
     employee = EmployeeSerializer(read_only=True)
-
     class Meta:
         model = PayrollResult
-        fields = [
-            'id',
-            'employee',
-            'total_incentives',
-            'total_deductions',
-            'final_salary',
-            'status',
-            'rejection_reason',
-            'created_at',
-            'components_snapshot', # This field provides data for the pop-up modal
-        ]
+        fields = '__all__'
 
 class RejectPayrollSerializer(serializers.Serializer):
-    """A simple serializer to validate the 'reason' field for rejections."""
-    reason = serializers.CharField(
-        required=True,
-        allow_blank=False,
-        max_length=500,
-        error_messages={
-            'required': 'A reason for rejection is required.',
-            'blank': 'Rejection reason cannot be empty.'
-        }
-    )
+    reason = serializers.CharField(required=True, allow_blank=False, max_length=500)
+
+class ManualComponentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Component
+        fields = ['employee', 'amount', 'reason', 'attachment']
+
+# --- NEW SERIALIZERS FOR HISTORY ---
+
+class ArchivedPayrollResultSerializer(serializers.ModelSerializer):
+    """Serializer for the read-only archived results."""
+    class Meta:
+        model = ArchivedPayrollResult
+        fields = '__all__'
+
+class PayrollRunSerializer(serializers.ModelSerializer):
+    """Serializer for listing the historical payroll runs."""
+    # Optionally, you can nest the results here if you want all data at once,
+    # but it's more efficient to fetch them on demand.
+    class Meta:
+        model = PayrollRun
+        fields = ['id', 'run_timestamp']

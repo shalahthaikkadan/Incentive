@@ -1,12 +1,14 @@
 // src/components/Sidebar.jsx
 import React from 'react';
-import { LayoutDashboard, FileUp, Settings } from 'lucide-react';
+import { LayoutDashboard, Gift, History as HistoryIcon, Settings } from 'lucide-react'; // Renamed History to avoid conflict
 
-function Sidebar() {
+function Sidebar({ currentPage, onNavigate }) {
   const navItems = [
-    { name: 'Dashboard', icon: <LayoutDashboard size={20} /> },
-    { name: 'Uploads', icon: <FileUp size={20} /> },
-    { name: 'Settings', icon: <Settings size={20} /> },
+    { name: 'Dashboard', page: 'dashboard', icon: <LayoutDashboard size={20} /> },
+    { name: 'Manual Entry', page: 'manualEntry', icon: <Gift size={20} /> },
+    // NEW: Added a link for the History page
+    { name: 'History', page: 'history', icon: <HistoryIcon size={20} /> },
+    { name: 'Settings', page: 'settings', icon: <Settings size={20} /> },
   ];
 
   return (
@@ -16,19 +18,19 @@ function Sidebar() {
       </div>
       <nav className="flex-grow px-4 py-6">
         <ul>
-          {navItems.map((item, index) => (
+          {navItems.map((item) => (
             <li key={item.name}>
-              <a
-                href="#"
-                className={`flex items-center px-4 py-3 my-1 rounded-lg transition-colors duration-200 ${
-                  index === 0
-                    ? 'bg-blue-50 text-blue-600 font-semibold' // Active state
+              <button
+                onClick={() => onNavigate(item.page)}
+                className={`w-full flex items-center px-4 py-3 my-1 rounded-lg text-left transition-colors duration-200 ${
+                  currentPage === item.page
+                    ? 'bg-blue-50 text-blue-600 font-semibold'
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
               >
                 {item.icon}
                 <span className="ml-3">{item.name}</span>
-              </a>
+              </button>
             </li>
           ))}
         </ul>

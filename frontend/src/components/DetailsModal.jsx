@@ -1,7 +1,7 @@
 // src/components/DetailsModal.jsx
 import React from 'react';
-import { X, FileText } from 'lucide-react';
-import api from '../api'; // Import the api instance to get the baseURL
+import { X, FileText, Paperclip } from 'lucide-react';
+import api from '../api';
 
 function DetailsModal({ isOpen, onClose, title, components }) {
   if (!isOpen) return null;
@@ -9,11 +9,50 @@ function DetailsModal({ isOpen, onClose, title, components }) {
   const formatCurrency = (amount) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
   
   // Construct the base URL for media files from the api instance
-  const mediaBaseUrl = `${api.defaults.baseURL.replace('/api', '')}/media/`;
+  const serverBaseUrl = api.defaults.baseURL.replace('/api', '');
+
+  // A helper component to render the correct source link
+  const SourceLink = ({ item }) => {
+    // Case 1: Manual entry with an attachment
+    if (item.source_file === 'Manual Entry' && item.attachment_url) {
+      return (
+        <a
+          href={`${serverBaseUrl}${item.attachment_url}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center text-xs text-blue-500 hover:text-blue-700 hover:underline mt-1"
+        >
+          <Paperclip size={12} className="mr-1.5" />
+          <span>View Attachment</span>
+        </a>
+      );
+    }
+    // Case 2: Uploaded file
+    if (item.source_file && item.source_file !== 'Manual Entry') {
+      return (
+        <a
+          href={`${serverBaseUrl}/media/${item.source_file}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center text-xs text-blue-500 hover:text-blue-700 hover:underline mt-1"
+        >
+          <FileText size={12} className="mr-1.5" />
+          <span>Source: {item.source_file}</span>
+        </a>
+      );
+    }
+    // Case 3: Manual entry with no attachment (or any other case)
+    return (
+      <div className="flex items-center text-xs text-gray-400 mt-1">
+        <FileText size={12} className="mr-1.5" />
+        <span>Source: Manual Entry</span>
+      </div>
+    );
+  };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 m-4 transform transition-all scale-95 opacity-0 animate-scale-in">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-md p-6 m-4">
         <div className="flex justify-between items-center border-b pb-3 mb-4">
           <h2 className="text-xl font-bold text-gray-800">{title} Breakdown</h2>
           <button onClick={onClose} className="p-2 text-gray-500 hover:bg-gray-100 rounded-full">
@@ -29,18 +68,7 @@ function DetailsModal({ isOpen, onClose, title, components }) {
                     <span className="text-gray-700 capitalize">{item.reason || 'N/A'}</span>
                     <span className="font-semibold text-gray-900">{formatCurrency(item.amount)}</span>
                   </div>
-                  {item.source_file && (
-                    // MODIFIED: This is now a clickable link that opens in a new tab
-                    <a
-                      href={`${mediaBaseUrl}${item.source_file}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-xs text-blue-500 hover:text-blue-700 hover:underline mt-1"
-                    >
-                      <FileText size={12} className="mr-1.5" />
-                      <span>Source: {item.source_file}</span>
-                    </a>
-                  )}
+                  <SourceLink item={item} />
                 </li>
               ))}
             </ul>
@@ -49,10 +77,6 @@ function DetailsModal({ isOpen, onClose, title, components }) {
           )}
         </div>
       </div>
-      <style>{`
-        @keyframes scale-in { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .animate-scale-in { animation: scale-in 0.2s ease-out forwards; }
-      `}</style>
     </div>
   );
 }
